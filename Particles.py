@@ -21,6 +21,18 @@ class FireParticle(arc.FadeParticle):
                            self.lifetime_elapsed / self.lifetime_original)
         self.alpha = clamp(a, 0, 255)
 
+        c1 = self.color[0]
+        c2 = self.color[1]
+        c3 = self.color[2]
+        if self.color[0] < 255:
+            c1 += 1
+        if self.color[1] < 255:
+            c2 += 1
+        if self.color[2] < 255:
+            c3 += 1
+        if self.color != (255, 255, 255):
+            self.color = (c1, c2, c3)
+
 
 class BoostEmitter(arc.Emitter):
     def __init__(self, center_xy, part_dir):
