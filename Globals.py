@@ -1,4 +1,6 @@
 from PIL import Image
+from Misc_Functions import tint_image
+from copy import deepcopy
 
 
 SCREEN_TITLE = "Pymunk Demo VER 1.0"
@@ -53,7 +55,14 @@ P_MOVE_FORCE = 4000
 # particles
 PARTICLE_SHAPE = Image.open("Resources/Particles/p_shape_round.png")
 RED = "#f80000"
+ORANGE = "#f8891d"
+YELLOW = "#f8e91d"
 GRAY = "#797979"
+gray_part = tint_image(deepcopy(PARTICLE_SHAPE), GRAY)
+red_part = tint_image(deepcopy(PARTICLE_SHAPE), RED)
+orange_part = tint_image(deepcopy(PARTICLE_SHAPE), ORANGE)
+yellow_part = tint_image(deepcopy(PARTICLE_SHAPE), ORANGE)
+
 
 # Helper functions
 def resize_screen(width: int, height: int):

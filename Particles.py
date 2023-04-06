@@ -1,43 +1,27 @@
 import arcade as arc
-from arcade.geometry_generic import clamp
-from Misc_Functions import tint_image
 from math import sin, cos
 import Globals
-from random import uniform
+from random import uniform, choice
 
 
-class FireParticle(arc.FadeParticle):
+RED_PART_TEXTURE = arc.Texture(f"red part01", Globals.red_part, hit_box_algorithm=None)
+ORANGE_PART_TEXTURE = arc.Texture(f"orange part02", Globals.orange_part, hit_box_algorithm=None)
+YELLOW_PART_TEXTURE = arc.Texture(f"yellow part03", Globals.yellow_part, hit_box_algorithm=None)
+GRAY_PART_TEXTURE = arc.Texture(f"gray part04", Globals.gray_part, hit_box_algorithm=None)
+
+
+class BoostParticle(arc.FadeParticle):
     def __init__(self, part_dir):
-        part_img = tint_image(Globals.PARTICLE_SHAPE, Globals.GRAY)
-        texture = arc.Texture(f"fire part", part_img, hit_box_algorithm=None)
+        part_img = choice([RED_PART_TEXTURE, ORANGE_PART_TEXTURE, YELLOW_PART_TEXTURE, GRAY_PART_TEXTURE])
+        texture = part_img
         super().__init__(filename_or_texture=texture, change_xy=(part_dir[0], part_dir[1]),
                          lifetime=.5, scale=uniform(.1, .9), start_alpha=200)
-
-    def update(self, delta_time: float = 1 / 60):
-        """Advance the Particle's simulation"""
-        super().update()
-        a = arc.utils.lerp(self.start_alpha,
-                           self.end_alpha,
-                           self.lifetime_elapsed / self.lifetime_original)
-        self.alpha = clamp(a, 0, 255)
-
-        c1 = self.color[0]
-        c2 = self.color[1]
-        c3 = self.color[2]
-        if self.color[0] < 255:
-            c1 += 1
-        if self.color[1] < 255:
-            c2 += 1
-        if self.color[2] < 255:
-            c3 += 1
-        if self.color != (255, 255, 255):
-            self.color = (c1, c2, c3)
 
 
 class BoostEmitter(arc.Emitter):
     def __init__(self, center_xy, part_dir):
         super().__init__(center_xy=center_xy, emit_controller=arc.EmitBurst(3),
-                         particle_factory=lambda emitter: FireParticle(part_dir))
+                         particle_factory=lambda emitter: BoostParticle(part_dir))
 
 
 def boost_emit(center_xy, player_angle):
