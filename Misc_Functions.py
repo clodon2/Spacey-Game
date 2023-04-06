@@ -25,3 +25,8 @@ def tint_image(src, color="#FFFFFF"):
     result = ImageOps.colorize(gray, (0, 0, 0, 0), color)
     result.putalpha(alpha)
     return result
+
+
+def parent_to(parent, child):
+    parent.children.append(child)
+    child.parent = parent

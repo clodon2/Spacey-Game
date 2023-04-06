@@ -1,8 +1,9 @@
 import arcade as arc
 import Globals
 import Levels as lvl
-from Misc_Functions import get_turn_multiplier
+from Misc_Functions import parent_to
 from Particles import boost_emit
+from Ship_Objects import BasicPart
 
 
 class GameView(arc.View):
@@ -110,7 +111,10 @@ class GameView(arc.View):
             self.player.change_angle = 0
 
         if self.powerup_pressed:
-            self.powerup_pressed = False
+            new_part = BasicPart()
+            new_part.center_x = self.player.center_x + 50
+            new_part.center_y = self.player.center_y + 50
+            self.scene.add_sprite("tests", new_part)
 
     def on_key_press(self, key, modifiers):
         if key == arc.key.W:
@@ -277,6 +281,11 @@ class GameView(arc.View):
             emitter.update()
 
         self.center_camera_to_player()
+
+        for part in arc.check_for_collision_with_list(self.player, self.scene["tests"]):
+            self.scene["tests"].remove(part)
+            self.scene["player"].append(part)
+            parent_to(self.player, part)
 
 
 def main():
